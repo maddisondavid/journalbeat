@@ -167,7 +167,8 @@ func (jb *Journalbeat) Run(b *beat.Beat) error {
 			rawEvent,
 			jb.config.CleanFieldNames,
 			jb.config.ConvertToNumbers,
-			jb.config.MoveMetadataLocation)
+			jb.config.MoveMetadataLocation,
+			jb.config.IncludeFields[:])
 
 		// TODO: type and input_type should be derived from the system journal
 		event["type"] = jb.config.DefaultType

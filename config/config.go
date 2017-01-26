@@ -35,6 +35,7 @@ type Config struct {
 	MoveMetadataLocation string        `config:"move_metadata_to_field"`
 	DefaultType          string        `config:"default_type"`
 	Units                []string      `config:"units"`
+	IncludeFields        []string      `config:"include_fields"`
 }
 
 // Named constants for the journal cursor placement positions

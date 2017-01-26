@@ -29,7 +29,7 @@ import (
 // - remove underscores from the beginning of fields as they are reserved in
 //   ElasticSearch for metadata information
 // - fields that can be converted to numbers, will be converted to numbers
-func MapStrFromJournalEntry(ev *sdjournal.JournalEntry, cleanKeys bool, convertToNumbers bool, MoveMetadataLocation string) common.MapStr {
+func MapStrFromJournalEntry(ev *sdjournal.JournalEntry, cleanKeys bool, convertToNumbers bool, MoveMetadataLocation string, includeFields []string) common.MapStr {
 	m := common.MapStr{}
 	// for the sake of MoveMetadataLocation we will write all the JournalEntry data except the "message" here
 	target := m
@@ -52,6 +52,12 @@ func MapStrFromJournalEntry(ev *sdjournal.JournalEntry, cleanKeys bool, convertT
 			m[nk] = nv
 			continue
 		}
+
+		// Only include specified fields
+		if len(includeFields) != 0 && !inslice(k, includeFields) {
+			continue
+		}
+
 		target[nk] = nv
 	}
 
@@ -93,4 +99,14 @@ func makeNewValue(value string, convertToNumbers bool) interface{} {
 		}
 		return value
 	}
+}
+
+func inslice(value string, slice []string) bool {
+	for _, v := range slice {
+		if strings.EqualFold(value, v) {
+			return true
+		}
+	}
+
+	return false
 }
